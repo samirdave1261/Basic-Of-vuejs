@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.0/vue.js"></script>
+    <title>VueJs</title>
+</head>
+
+<style>
+    [v-cloak]  {
+        display: none;
+    }
+</style>
+
+<div id="VueId" :style="bg" style="position: fixed;left: 0;top: 0;background-color: rgb(150, 49, 49);height: 100%;width: 100%;overflow: scroll;">
+    <div  style="padding: 10px 10px 100px 10px;"  v-cloak > 
+        <h1 style="justify-content: center;display:flex;background-color: gray;color: white;">{{welcomemsg_}}</h1>
+
+        <!-- Two way binding -->
+        <h2 style="justify-content: center;display:flex">Two way binding</h2>
+        <input type="text" placeholder="Enter text here.." v-model="textin_">
+        <label>{{textin_}}</label>
+
+        <!-- Button Click event -->
+        <h2 style="justify-content: center;display:flex">Button Click event</h2>
+        <input type="button" value="Click event" v-on:click="ButtonPress_">
+
+        <!-- Change backgroud color -->
+        <h2 style="justify-content: center;display:flex">Change backgroud color</h2>
+        <div style="background: white;padding: 13px;width: 14%;"><label>Select color here: &nbsp;</label><input type="color" v-model="bgcolor_"></div>
+
+        <!-- Loop Example -->
+        <h2 style="justify-content: center;display:flex">Loop Example</h2>
+        <label v-for="item_ in loopArray_">{{item_}}</label>
+
+        <!-- Searching -->
+        <h2 style="justify-content: center;display:flex">Searching</h2>
+        <input type="text" placeholder="Search here.." v-model="searchFilter_">
+        <br><br>
+        <li v-for="item_ in NewSearchArr_">
+            {{item_}}
+        </li>
+
+        <!-- Sorting -->
+        <h2 style="justify-content: center;display:flex">Sorting</h2>
+        <table class="table" border="1" width="100%">
+            <tr>
+                <th v-on:click="sortFunction('Name')">Name</th>
+                <th>Country</th>
+            </tr>
+            <tr v-for="iem_ in sortArr_ ">
+                <td>{{iem_.Name}}</td>
+                <td>{{iem_.Country}}</td>
+            </tr>
+        </table>
+
+        <!-- Form Elements -->
+        <h2 style="justify-content: center;display:flex"> Form Elements </h2>
+        <select>
+            <option :disabled="item_ == 'Chandan'" v-for="item_ in dropArr_" id="{{item_}}">{{item_}}</option>
+        </select>
+        <input type="checkbox" v-model="check_"> <span>{{check_}}</span>
+        <input type="button" value="Click me" v-on:click="[check_ = !check_]">
+
+        <!-- Hide/Show -->
+        <h2 style="justify-content: center;display:flex">Hide/Show</h2>
+        <input type="button" value="Click to Hide/Show" v-on:click="[lblHide_ = !lblHide_]"> <label v-if="lblHide_">Hide me Bro</label>
+
+        <!-- Watchers -->
+        <h2 style="justify-content: center;display:flex">Watchers</h2>
+        <input type="text" placeholder="Enter text here.." v-model="watcher_">
+    </div>
+    
+</div>
+
+<script type="text/javascript">
+  var app = new Vue({
+            el: '#VueId',
+            data: {
+                welcomemsg_: '',
+                textin_:'',
+                bgcolor_: localStorage.getItem('bgcolorVue'),
+                bg:{backgroundColor :localStorage.getItem('bgcolorVue'), color:''},
+                loopArray_ : [1,2,3,4,5,6],
+                searchArray_:['Vikalp','Samir','Chandan','Aditya','Ankit','Prince','Vivek'],
+                searchFilter_:'',
+                NewSearchArr_:[],
+                sortArr_:[{Name:'Vikalp',Country:'India'},{Name:'Samir',Country:'Canada'},{Name:'Chandan',Country:'America'},{Name:'Aditya',Country:'Japan'}],
+                sortKey:'name',
+                reverse: true,  
+                dropArr_: ['Vikalp','Samir','Chandan','Aditya','Ankit','Prince','Vivek'],          
+                check_: true,
+                lblHide_:true,
+                watcher_:'',
+            },
+            mounted(){
+                this.welcomemsg_ = 'Welcome to the Vue World.';
+                this.NewSearchArr_= this.searchArray_;
+            },
+            methods:{
+                ButtonPress_: function(){
+                    alert('Welcome bro.');
+                },
+
+                sortFunction: function(var_){
+
+                },
+
+
+            },
+
+            watch:{
+                bgcolor_:function(new_,old_){
+                    localStorage.setItem('bgcolorVue',this.bgcolor_);
+                    this.bg.backgroundColor = this.bgcolor_;
+                    this.bg.color = 'white';
+                },
+                searchFilter_:function(new_,old_){
+                    this.NewSearchArr_ = this.searchArray_.filter(x=> { return x.toLowerCase().includes(new_)});
+                },
+                watcher_: function(new_, old_){
+                    alert("New Val: "+new_ + " Old Val : "+old_);
+                },
+            },
+         });
+</script>
+
+
+</html>
